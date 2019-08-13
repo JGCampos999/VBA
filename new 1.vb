@@ -2,17 +2,13 @@ Private Sub CommandButton4_Click()
     Dim columns(26) As String
     Dim final As String
     Dim i As Integer
-    
     For i = 0 To 25
         columns(i) = setColumn(i)
     Next i
-    
     Dim linhaStart As Integer
     Dim linhaEnd As Integer
-    
     Dim colunaStart As String
     Dim colunaEnd As String
-    
     If IsNumeric(Range("E15")) = True Or IsNumeric(Range("E16")) = True Then
         ActiveSheet.Range("E18").Value = "Inválido"
     Else
@@ -28,13 +24,10 @@ Private Sub CommandButton4_Click()
             For i = 1 To 25
                 ActiveSheet.Range("A" & i).Value = ""
             Next i
-
             Dim posInit As Integer
             Dim posFinale As Integer
-
             posInit = -1
             posFinale = -1
-            
             For i = 0 To 25
                 If columns(i) = colunaStart Then
                     posInit = i
@@ -43,11 +36,11 @@ Private Sub CommandButton4_Click()
                     posFinale = i
                 End If
             Next i
-            
             If posFinale = -1 Or posInit = -1 Then
                 ActiveSheet.Range("E18").Value = "Inválido"
             Else
-                i = 0
+                ActiveSheet.Range("A1").Value = "Insert into " & ActiveSheet.Range(colunaStart & (linhaStart - 2)).Value & " Values"
+                i = 1
                 For linhaStart = linhaStart To linhaEnd
                     i = i + 1
                     final = "("
@@ -58,8 +51,11 @@ Private Sub CommandButton4_Click()
                         Else
                             final = final & "'" & Range(columns(j) & linhaStart).Value & "'"
                         End If
-                        If j = posFinale Then
+                        If j = posFinale And linhaStart = linhaEnd Then
                             final = final & ")"
+                            ActiveSheet.Range("A" & i).Value = final
+                        ElseIf j = posFinale Then
+                            final = final & "),"
                             ActiveSheet.Range("A" & i).Value = final
                         Else
                             final = final & ","
@@ -70,10 +66,8 @@ Private Sub CommandButton4_Click()
         End If
     End If
 End Sub
-
 Function setColumn(i As Integer) As String
     Dim columns(26) As String
-    
     columns(0) = "A"
     columns(1) = "B"
     columns(2) = "C"
